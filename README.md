@@ -1,1 +1,1 @@
-# industrial-and-mobile-robotics-project
+# Industrial and mobile robotics project
