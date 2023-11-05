@@ -6,19 +6,19 @@ function [room] = Build_Room(vertices)
 
     room=[];
     for i=1:4:length(vertices)
-        % lato inferiore
+        % lower side
         for j=vertices(i,1):vertices(i+1,1)
             room=[room; j vertices(i,2)];
         end
-        % lato superiore
+        % upper side
         for j=vertices(i+2,1):vertices(i+3,1)
             room=[room; j vertices(i+3,2)];
         end
-        % lato sinistro
+        % left side
         for j=vertices(i+1,2):vertices(i+2,2)
             room=[room; vertices(i,1) j];
         end
-        % lato destro
+        % right side
         for j=vertices(i+1,2):vertices(i+2,2)
             room=[room; vertices(i+3,1) j];
         end

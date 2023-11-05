@@ -1,33 +1,32 @@
 function [path] = Artificial_Potential_Fields(start,goal,stanza,ostacoli)
 %ARTIFICIAL_POTENTIAL_FIELDS
-%   Calcola il percorso utilizzando il metodo dei campi potenziali
-%   artificiali
+%   Calculate the path using the Artificial Potential Fields method
 
     X0 = start;
     G = goal;
     O = stanza;
 
-    %% Calcolo del potenziale totale
-    % Definizione delle funzioni Ja, potenziale attrattivo, e 
-    % Jr, potenziale repulsivo
+    %% Calculation of the total potential
+    %  Definition of the functions Ja (attractive potential) 
+    %  and Jr (repulsive potential)
     Ja=@(x,y,Gx,Gy)((1/2)*((x-Gx).^2+(y-Gy).^2));
     Jr=@(x,y,Ox,Oy)(1./((x-Ox).^2+(y-Oy).^2));
     
-    % Definizione dei gradienti delle funzioni soprastanti
+    % Definition of the gradients of the above functions
     nablaJaX=@(x,y,Gx,Gy)(x-Gx);
     nablaJaY=@(x,y,Gx,Gy)(y-Gy);
     nablaJrX=@(x,y,Ox,Oy)(2*(Ox-x)./(((x-Ox).^2+(y-Oy).^2)));
     nablaJrY=@(x,y,Ox,Oy)(2*(Oy-y)./(((x-Ox).^2+(y-Oy).^2)));
     
-    % Regione di validita'
+    % Validity region
     dmin=3;
     rho=@(x,y,Ox,Oy)((x-Ox).^2+(y-Oy).^2<=dmin^2);
     
-    % Pesi rispettivamente di potenziale attrattivo e repulsivo
+    % Weights for the attractive and repulsive potentials, respectively.
     wa=1;
     wo=100;
     
-    % Definizione dello spazio di lavoro
+    % Definition of the workspace
     xm=min(X0(1),G(1));xm=min(xm,min(O(:,1)));
     xM=max(X0(1),G(1));xM=max(xM,max(O(:,1)));
     ym=min(X0(2),G(2));ym=min(ym,min(O(:,2)));
@@ -38,20 +37,20 @@ function [path] = Artificial_Potential_Fields(start,goal,stanza,ostacoli)
     yy=ym:deltaXY:yM;
     [XX,YY]=meshgrid(xx,yy);
 
-    % POTENZIALE ATTRATTIVO
+    % ATTRACTIVE POTENTIAL
     Za=Ja(XX,YY,G(1),G(2));
     nablaJaXX=nablaJaX(XX,YY,G(1),G(2));
     nablaJaYY=nablaJaY(XX,YY,G(1),G(2));
     % Plot
-    figure(); grid; surf(XX,YY,Za); title('Potenziale Attrattivo');
-    % Normalizzazione di Ja (solo per visualizzarlo meglio)
+    figure(); grid; surf(XX,YY,Za); title('Attractive Potential');
+    % Normalization of Ja (only for better visualization)
     nablaJaXXn=nablaJaXX./sqrt(nablaJaXX.^2+nablaJaYY.^2);
     nablaJaYYn=nablaJaYY./sqrt(nablaJaXX.^2+nablaJaYY.^2);
     figure(); grid; quiver(XX,YY,-nablaJaXXn,-nablaJaYYn);
-    title('Antigradiente Potenziale Attrattivo'); axis('equal');
+    title('Antigradient of Attractive Potential'); axis('equal');
     axis([goal(1)-15 goal(1)+15 goal(2)-15 goal(2)+15]);
     
-    %POTENZIALE REPULSIVO
+    % REPULSIVE POTENTIAL
     Zr=zeros(size(Za));
     nablaJrXX=zeros(size(nablaJaXX));
     nablaJrYY=zeros(size(nablaJaXX));
@@ -63,7 +62,7 @@ function [path] = Artificial_Potential_Fields(start,goal,stanza,ostacoli)
         nablaJrYY=nablaJrYY+nablaJrY(XX,YY,oi(1),oi(2)).*rho(XX,YY,...
                                                             oi(1),oi(2));
     end
-    % Si annulla il potenziale all'interno degli ostacoli
+    % Cancellation of the potential inside the obstacles
     for o=5:4:length(ostacoli)
         for i=1:length(XX)
             for j=1:length(YY)
@@ -76,26 +75,26 @@ function [path] = Artificial_Potential_Fields(start,goal,stanza,ostacoli)
         end
     end
     % Plot
-    figure(); grid; surf(XX,YY,Zr); title('Potenziale Repulsivo');
-    % Normalizzazione di Ja (solo per visualizzarlo meglio)
+    figure(); grid; surf(XX,YY,Zr); title('Repulsive Potential');
+    % Normalization of Ja (only for better visualization)
     nablaJrXXn=nablaJrXX./sqrt(nablaJrXX.^2+nablaJrYY.^2);
     nablaJrYYn=nablaJrYY./sqrt(nablaJrXX.^2+nablaJrYY.^2);
     figure(); grid; quiver(XX,YY,-nablaJrXXn,-nablaJrYYn);
-    title('Antigradiente Potenziale Repulsivo'); axis('equal');
+    title('Antigradient of Repulsive Potential'); axis('equal');
     axis([0 100 0 100]);
     
-    % POTENZIALE TOTALE
+    % TOTAL POTENTIAL
     J=wa*Za+wo*Zr;
     nablaJx=wa*nablaJaXX+wo*nablaJrXX;
     nablaJy=wa*nablaJaYY+wo*nablaJrYY;
     
-    % Normalizzazione di J (solo per visualizzarlo meglio)
+    % Normalization of J (only for better visualization)
     nablaJxn=nablaJx./sqrt(nablaJx.^2+nablaJy.^2);
     nablaJyn=nablaJy./sqrt(nablaJx.^2+nablaJy.^2);
     
-    figure(); grid; surf(XX,YY,J); title('Potenziale Totale');
+    figure(); grid; surf(XX,YY,J); title('Total Potential');
     figure(); grid; quiver(XX,YY,-nablaJxn,-nablaJyn);
-    title('Antigradiente Potenziale Totale'); axis('equal');
+    title('Antigradient of Total Potential'); axis('equal');
     axis([0 100 0 100]);
     
     %% APF
@@ -134,6 +133,6 @@ function [path] = Artificial_Potential_Fields(start,goal,stanza,ostacoli)
     % Plot
     path=path';
     figure(1); plot(path(:,1),path(:,2),'-','LineWidth',2); 
-    title('Percorso con Artificial Potential Fields');legend('off');
+    title('Path using Artificial Potential Fields');legend('off');
 end
 
