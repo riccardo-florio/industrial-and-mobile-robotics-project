@@ -1,20 +1,20 @@
 function closestPoint = findClosestPoint(m, P)
 %FIND_CLOSEST_POINT
-%   Data una matrice Nx2 di punti del piano, restituisce il punto più
-%   vicino a P tra tutti quelli presenti in m
+%   Given an Nx2 matrix of points in the plane, returns the point closest
+%   to P among all those in m.
 
-    % Inizializza la distanza minima con un valore infinito
+    % Initialize the minimum distance with an infinite value
     closestDistance = Inf;
-    % Inizializza il punto più vicino come vuoto
+    % Initialize the nearest point as empty
     closestPoint = [];
 
     for i = 1:size(m, 1)
-        % Calcola la distanza euclidea tra il punto i-esimo di m e il 
-        % punto P
+        % Computes the Euclidean distance between the i-th point in m and
+        % point P
         distance = norm(m(i, :) - P);
 
-        % Se la distanza è minore della distanza minima attuale, aggiorna 
-        % la distanza minima e il punto più vicino
+        % If the distance is less than the current minimum distance, update
+        % the minimum distance and the nearest point
         if distance < closestDistance
             closestDistance = distance;
             closestPoint = m(i, :);

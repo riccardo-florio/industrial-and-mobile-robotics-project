@@ -1,8 +1,8 @@
-function plot_andamenti_2(t2,x1,y1,G,theta1,thehaG)
-%PLOT_ANDAMENTI_2
-%   Esegue il plot degli andamenti delle variabili posizione ed
-%   orientamento reali e di rifermento del robor ottenuti nella fase di 
-%   posture regulation.
+function plot_trends_2(t2,x1,y1,G,theta1,thehaG)
+% PLOT_TRENDS_2
+%   Plots the trends of the actual position and orientation variables
+%   along with the reference ones obtained during the posture regulation
+%   phase.
 
     figure();
     subplot(311);hold on;

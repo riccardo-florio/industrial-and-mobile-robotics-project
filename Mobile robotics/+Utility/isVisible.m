@@ -1,6 +1,6 @@
 function visible = isVisible(P1, P2, ostacoli)
 %IS_VISIBLE
-%   Funzione che determina se il punto P1 è visibile dal punto P2
+%   Function that determines if point P1 is visible from point P2
     
     visible = true;
     x=linspace(P1(1),P2(1),100);

@@ -3,10 +3,10 @@ function Xdot = robot_control_FL(t,X, ...
     xd_star,yd_star, ...
     kx,ky,b)
 
-%CONTROLLO BASATO SU FEEDBACK LINEARIZATION
-%   Si occupa di ricavare i segnali di comando v e w del robot utilizzando
-%   il metodo dell'Input-Output Linearization. Dopodiche' li applica al 
-%   modello uniciclo.
+% CONTROL BASED ON FEEDBACK LINEARIZATION
+%   Deals with obtaining the control signals v and w of the robot using
+%   the Input-Output Linearization method. Afterwards, it applies them to
+%   the unicycle model.
 
     x=X(1);
     y=X(2);

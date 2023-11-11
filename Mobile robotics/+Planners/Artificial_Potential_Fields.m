@@ -1,10 +1,10 @@
-function [path] = Artificial_Potential_Fields(start,goal,stanza,ostacoli)
+function [path] = Artificial_Potential_Fields(start,goal,room,obstacles)
 %ARTIFICIAL_POTENTIAL_FIELDS
 %   Calculate the path using the Artificial Potential Fields method
 
     X0 = start;
     G = goal;
-    O = stanza;
+    O = room;
 
     %% Calculation of the total potential
     %  Definition of the functions Ja (attractive potential) 
@@ -63,11 +63,11 @@ function [path] = Artificial_Potential_Fields(start,goal,stanza,ostacoli)
                                                             oi(1),oi(2));
     end
     % Cancellation of the potential inside the obstacles
-    for o=5:4:length(ostacoli)
+    for o=5:4:length(obstacles)
         for i=1:length(XX)
             for j=1:length(YY)
-                if (ostacoli(o,1)<XX(i,j) && XX(i,j)<ostacoli(o+1,1)) ...
-                    && (ostacoli(o,2)<YY(i,j) && YY(i,j)<ostacoli(o+2,2))
+                if (obstacles(o,1)<XX(i,j) && XX(i,j)<obstacles(o+1,1)) ...
+                    && (obstacles(o,2)<YY(i,j) && YY(i,j)<obstacles(o+2,2))
                     nablaJaXX(i,j)=0;nablaJaYY(i,j)=0;
                     nablaJrXX(i,j)=0;nablaJrYY(i,j)=0;
                 end

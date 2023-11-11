@@ -1,16 +1,16 @@
-function [path] = Voronoi_Diagrams(start,goal,stanza,ostacoli)
+function [path] = Voronoi_Diagrams(start,goal,room,ostacoli)
 %VORONOI_DIAGRAMS
-%   Calcola il percorso utilizzando il metodo del diagramma di Vroronoi
+%   Calculate the path using the Voronoi diagram method
     
-    % Estrazione dei punti del diagramma di Voronoi
-    [x,y] = voronoi(stanza(:,1),stanza(:,2));
+    % Extraction of the points of the Voronoi diagram
+    [x,y] = voronoi(room(:,1),room(:,2));
     
-    % Plot del diagramma
+    % Plot of the diagram
     figure(1); plot(x, y, 'Color', '#4DBEEE'); axis([-5 105 -5 105]);
-    title('Percorso con Diagramma di Voronoi');
+    title('Path with Voronoi Diagram');
     
     
-    %% Rimozione dei punti interni agli ostacoli ed esterni alla stanza
+    %% Removal of points inside obstacles and outside the room
     i=0;
     while i<size(x,2)
         i=i+1;
@@ -35,21 +35,21 @@ function [path] = Voronoi_Diagrams(start,goal,stanza,ostacoli)
         end
     end
     
-    %% Aggiunta dei punti di start e goal nel diagramma
-    % Individuazione dei punti piu' vicini a start e goal
+    %% Add start and goal points to the diagram
+    % Find the points closest to the start and goal
     m=[x(1,:)' y(1,:)'; x(2,:)' y(2,:)'];
-    closestS = Utilita.findClosestPoint(m,start);
-    closestG = Utilita.findClosestPoint(m,goal);
-    % Inserimento nel diagramma
+    closestS = Utility.findClosestPoint(m,start);
+    closestG = Utility.findClosestPoint(m,goal);
+    % Insert into the diagram
     x=[x, [closestS(1);start(1)], [closestG(1);goal(1)]];
     y=[y, [closestS(2);start(2)], [closestG(2);goal(2)]];
     
     figure(1); plot(x, y,'LineWidth',1,'Color','#A2142F');
     
-    %% Grafo
-    % Inserimento in un unico vettore di tutti i punti del diagramma in 
-    % modo che ogni coppia v(i,:),v(i+1,:) con i=i+2 rappresenta un
-    % collegamento nel giagramma
+    %% Graph
+    % Place all diagram points into a single vector, where each 
+    % pair v(i, :), v(i+1, :) with i=i+2 represents a connection 
+    % in the diagram
     v=zeros(2*length(x),2);j=1;
     for i=1:2:length(v)-1
             v(i,:)=[x(2,j),y(2,j)];
@@ -61,33 +61,33 @@ function [path] = Voronoi_Diagrams(start,goal,stanza,ostacoli)
             j=j+1;
     end
     
-    % Creazione di un indice dei punti del diagramma
+    % Create an index for diagram points
     indice=unique(v, 'rows');
     
-    % Creazione del grafo
+    % Create the graph
     g=graph();
     g=addnode(g,size(indice,1));
     
-    % Aggiunta degli archi in maniera appropriata al grafo usando l'indice
-    % Sapendo che ogni coppia v(i,:),v(i+1,:) con i=i+2 rappresenta un
-    % collegamento nel giagramma, si puo' costruire il grafo secondo
-    % questo principio
+    % Add edges appropriately to the graph using the index
+    % Knowing that each pair v(i, :), v(i+1, :) with i=i+2 represents 
+    % a connection in the diagram, we can build the graph based on 
+    % this principle
     for i=1:2:length(v)-1
-        ig1=Utilita.trovaIndiceRiga(indice,v(i,:));
-        ig2=Utilita.trovaIndiceRiga(indice,v(i+1,:));
+        ig1=Utility.trovaIndiceRiga(indice,v(i,:));
+        ig2=Utility.trovaIndiceRiga(indice,v(i+1,:));
         g=addedge(g,ig1,ig2);
     end
     
 %     figure; plot(g)
     
-    % Percorso minimo
-    is=Utilita.trovaIndiceRiga(indice,start);
-    ig=Utilita.trovaIndiceRiga(indice,goal);
+    % Minimum path
+    is=Utility.trovaIndiceRiga(indice,start);
+    ig=Utility.trovaIndiceRiga(indice,goal);
     percorsoMinimo = shortestpath(g,is,ig);
     
     path = indice(percorsoMinimo, :);
     
-    % Aggiunta dei punti mancanti tra due distanti piu' di 1,5
+    % Add missing points between two points more than 1.5 units apart
     i=0;
     while i<size(path,1)-1
         i=i+1;

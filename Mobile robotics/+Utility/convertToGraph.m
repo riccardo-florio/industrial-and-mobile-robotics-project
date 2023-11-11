@@ -1,7 +1,7 @@
 function graphObj = convertToGraph(matriceDiAdiacenza, points)
     graphObj = graph(matriceDiAdiacenza, 'upper');
 %CONVERT_TO_GRAPH
-%   Funzione che costruisce il grafo a partire dalla matrice di adiacenza
+%   Function that constructs the graph from the adjacency matrix.
     
     % Imposta le etichette dei nodi del grafo
     numP = size(points, 1);

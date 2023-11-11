@@ -4,10 +4,10 @@ function Xdot = robot_control_lin(t,X, ...
     xdd_star,ydd_star, ...
     a,delta)
 
-%CONTROLLO LINEARIZZATO
-%   Si occupa di ricavare i segnali di comando v e w del robot utilizzando
-%   l'approssimazione lineare dell'errore attorno a 0. Dopodiche' li 
-%   applica al modello uniciclo.
+% LINEARIZED CONTROL
+%   Deals with obtaining the control signals v and w of the robot using
+%   the linear approximation of the error around 0. Afterwards, it
+%   applies them to the unicycle model.
 
     x=X(1);
     y=X(2);
@@ -28,7 +28,7 @@ function Xdot = robot_control_lin(t,X, ...
 
     ex=cos(theta)*(xstar-x)+sin(theta)*(ystar-y);
     ey=-sin(theta)*(xstar-x)+ cos(theta)*(ystar-y);
-    etheta=Utilita.delta_angle(thetastar,theta);
+    etheta=Utility.delta_angle(thetastar,theta);
 
     k1=2*delta*a;
     k3=k1;

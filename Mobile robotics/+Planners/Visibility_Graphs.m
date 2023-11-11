@@ -1,51 +1,50 @@
-function [path] = Visibility_Graphs(start,goal,ostacoli)
-%VISIBILITY_GRAPHS
-%   Calcola il percorso utilizzando il metodo dei grafi di visibilita'
+function [path] = Visibility_Graphs(start, goal, obstacles)
+% VISIBILITY_GRAPHS
+%   Calculates the path using the visibility graph method
+
+    % Removal of the room boundaries from the list of obstacles and
+    % addition of the start and goal points
+    boundaries = obstacles(5:end, :);
+    boundaries = [start; boundaries; goal];
     
-    % Rimozione degli estremi della stanza dalla lista degli ostacoli ed
-    % aggiunta dei punti di start e goal
-    estremi = ostacoli(5:end,:);
-    estremi = [start; estremi; goal];
-    
-    % Creazione della matrice di adiacenza
-    numPunti = size(estremi, 1);
-    matriceDiAdiacenza = zeros(numPunti, numPunti);
-    for i = 1:numPunti
-        for j = i+1:numPunti
-            if Utilita.isVisible(estremi(i, :), estremi(j, :), ostacoli)
-                matriceDiAdiacenza(i, j) = 1;
-                matriceDiAdiacenza(j, i) = 1;
+    % Creation of the adjacency matrix
+    numPoints = size(boundaries, 1);
+    adjacencyMatrix = zeros(numPoints, numPoints);
+    for i = 1:numPoints
+        for j = i+1:numPoints
+            if Utility.isVisible(boundaries(i, :), boundaries(j, :), obstacles)
+                adjacencyMatrix(i, j) = 1;
+                adjacencyMatrix(j, i) = 1;
             end
         end
     end
     
-    % Creazione del grafo
-    grafo = Utilita.convertToGraph(matriceDiAdiacenza, estremi);
+    % Creation of the graph
+    graph = Utility.convertToGraph(adjacencyMatrix, boundaries);
     
-    % Plot del grafo
-    plot(grafo, 'XData', grafo.Nodes.X, 'YData', grafo.Nodes.Y, ...
-        'NodeLabel', grafo.Nodes.Name);
+    % Plot of the graph
+    plot(graph, 'XData', graph.Nodes.X, 'YData', graph.Nodes.Y, ...
+        'NodeLabel', graph.Nodes.Name);
     
-    % Individuazione del percorso minimo nel grafo
-    percorsoMinimo = shortestpath(grafo,1,numPunti);
+    % Identification of the minimum path in the graph
+    shortestPath = shortestpath(graph, 1, numPoints);
     
-    % Discretizzazione del percorso minimo
-    numNodi = length(percorsoMinimo);
-    path=[];
-    for i = 1:numNodi-1
-        pi1 = percorsoMinimo(i);
-        pi2 = percorsoMinimo(i+1);
-        % Discretizzazione del percorso tra due nodi
-        x=linspace(grafo.Nodes.X(pi1),grafo.Nodes.X(pi2),50);
-        y=linspace(grafo.Nodes.Y(pi1),grafo.Nodes.Y(pi2),50);
-        for j=1:length(x)-1
-            path=[path; x(j) y(j)];
+    % Discretization of the minimum path
+    numNodes = length(shortestPath);
+    path = [];
+    for i = 1:numNodes - 1
+        node1 = shortestPath(i);
+        node2 = shortestPath(i+1);
+        % Discretization of the path between two nodes
+        x = linspace(graph.Nodes.X(node1), graph.Nodes.X(node2), 50);
+        y = linspace(graph.Nodes.Y(node1), graph.Nodes.Y(node2), 50);
+        for j = 1:length(x) - 1
+            path = [path; x(j) y(j)];
         end
     end
-    path=[path; grafo.Nodes.X(numPunti) grafo.Nodes.Y(numPunti)];
+    path = [path; graph.Nodes.X(numPoints) graph.Nodes.Y(numPoints)];
     
-    % Plot del percorso finale
-    plot(path(:,1),path(:,2),'-','LineWidth',2);
-    title('Percorso con Grafo di Visibilità');legend('off');
+    % Plot of the final path
+    plot(path(:, 1), path(:, 2), '-', 'LineWidth', 2);
+    title('Path with Visibility Graph'); legend('off');
 end
-

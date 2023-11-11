@@ -1,7 +1,7 @@
 function plot_ostacoli_ingrassati(ostacoli,x0,y0,G,r)
-%PLOT_OSTACOLI_INGRASSATI
-%   Esegue il plot della stanza con gli ostacoli reali ingrassati della
-%   linghezza del raggio + 10% * raggio.
+% PLOT_THICKENED_OBSTACLES
+%   Plots the room with the actual obstacles thickened by the length of
+%   the radius + 10% * radius.
 
     figure(); axis('equal'); axis([-r 100+r -r 100+r]); hold on
     rectangle('Position', [ostacoli(1,1)-r ostacoli(1,2)-r ...

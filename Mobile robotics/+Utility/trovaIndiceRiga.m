@@ -1,7 +1,7 @@
 function indiceRiga = trovaIndiceRiga(matrice, rigaDaCercare)
-%TROVA_INDICE_RIGA 
-%   Restituisce l'indice della rica passata in input. Restituisce -1 se
-%   la riga non e' presente nella matrice
+% FIND_ROW_INDEX
+%   Returns the index of the input row. Returns -1 if the row is not
+%   present in the matrix.
 
     for i=1:size(matrice,1)
         if matrice(i,:)==rigaDaCercare

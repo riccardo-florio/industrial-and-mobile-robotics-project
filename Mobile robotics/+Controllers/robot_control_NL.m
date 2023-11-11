@@ -4,9 +4,10 @@ function Xdot = robot_control_NL(t,X, ...
     xdd_star,ydd_star, ...
     k1,k2,k3)
 
-%CONTROLLO NON LINEARIZZATO
-%   Si occupa di ricavare i segnali di comando v e w del robot utilizzando 
-%   un controllore non lineare. Dopodiche' li applica al modello uniciclo.
+% NONLINEAR CONTROL
+%   Deals with obtaining the control signals v and w of the robot using
+%   a nonlinear controller. Afterwards, it applies them to the unicycle 
+%   model.
 
     x=X(1);
     y=X(2);
@@ -27,7 +28,7 @@ function Xdot = robot_control_NL(t,X, ...
 
     ex=cos(theta)*(xstar-x)+sin(theta)*(ystar-y);
     ey=-sin(theta)*(xstar-x)+cos(theta)*(ystar-y);
-    etheta=Utilita.delta_angle(thetastar,theta);
+    etheta=Utility.delta_angle(thetastar,theta);
 
     ux=-k1(vstar,wstar)*ex;
     uy=-k2*vstar*(sin(etheta)/etheta)*ey-k3(vstar,wstar)*etheta;
